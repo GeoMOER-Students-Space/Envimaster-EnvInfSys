@@ -8,7 +8,8 @@ project_folders = c("data/",
                     "data/003_Stage_2/",
                     "data/004_Stage_3/",  #local data not in repo
                     
-                    "repo/src/",   #for scripts
+                    "repo/src/", #for scripts
+                    "repo/src/Cenith_V2",
                     "repo/doc/",   #for docs
                     "repo/lit/"    #for literature
                     
