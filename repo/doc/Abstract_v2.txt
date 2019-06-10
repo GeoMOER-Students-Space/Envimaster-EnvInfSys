@@ -1,0 +1,76 @@
+Umweltinformationssysteme II – Hypothesen und Workflow
+Schupp, A., Schwalb, J., Schönberg, A. & C. Simon
+Fragestellung
+F1:
+Kann auf Grundlage von wiederholten erhobenen UAV-basierten RGB Daten der Zeitpunkt des Blattaustriebs bei Bäumen in einem Mittelgebirgswald erkannt werden?
+F2:
+Lassen sich zeitliche Abweichungen von dem zu erwartenden artspezifischen Blattaustrieb von Buche und Eiche erkennen? Lässt sich feststellen, dass signifikante Mengen an Buchen auch vor den Eichen austreiben?
+Arbeitshypothese
+H1:
+Unter der Verwendung von UAV-basierten RGB und Punktewolkendaten lässt sich, mithilfe einer Einzelbaumsegmentierung, der Zeitpunkt des Blattaustriebs pro Einzelbaum bestimmen. 
+H2:
+Mit Hilfe eines Maschinenlernverfahrens (RF) lässt sich auf Grundlage von RGB Kanälen und einer Hauptkomponentenanalyse (PCA) die Baumart klassifizieren und durch eingemessene Bäume validieren.
+H3:
+Basierend auf einer überwachten Klassifizierung von Grünwerten, welche über die gesamte Zeitreihe trainiert werden, kann jede Einzelaufnahme pixelbasiert in grün und nicht grün abgegrenzt werden. In Kombination mit den Segmenten der Baumkronen lässt sich so feststellen, wann welcher Baum austreibt. Dabei wird angenommen, dass grüne Pixel innerhalb eines Segmentes dem Blattaustrieb zuzuordnen sind.
+H4:
+Durch den Zeitpunkt des Blattaustriebs und der Baumart kann eine raumzeitliche Statistik erzeugt werden. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Baumkronen Segmentierung
+- Punktwolke aus Orthophotos mit möglichst ausgeprägter Blattentwicklung bzw. gut differenzierbarem Kronendach.
+- CHM aus Punktwolke erstellen (Anleitung im Github Dokumentation von Gisma) 
+- Anwendung von Cenith V2 (Schönberg und Schwalb 2018) Funktionsbündel für automatisierte Segmentierung (watershed) und Validierung (aus erstem Semester)
+- Validierung anhand eingemessener Punkte über differenzielles GPS  (Schwellenwert mind. 8 von 10 Bäumen)
+- Ergebnis: Segmente der Entitäten für Greeness
+
+- Klassifizierung der Baumarten (Eiche/Buche) mit Randomforest und Spektralkanälen und PCA
+- Problem: 
+o möglicherweise fehlende Belaubung in den UAV-basierten Orthophotos
+o Satelliten-basierte Orthophotos sind möglicherweise zu alt um den aktuellen Zustand abzubilden (LIDAR/RGB Problem)
+- Ergebnis: Segmente der Entitäten für Greeness nach Baumart
+Blattaustrieb
+- Angleichen aller Orthophotos auf Lagetreue
+o Abgleich der Koordinaten der eingemessenen Bäume (bekannt) mit lagekorrigiertem Orthophoto (sind an Koordinaten xy im Orthophoto auch die tatsächlichen Bäume)
+(Im GIS mit Transparenten Layer übereinander verschieben bis Baumpunkte möglichst einheitlich Lage treu sind)
+ODER
+o Händisch nach Augenmaß möglichst genau angleichen
+- RF: „Grün“ Erkennung
+o Trainingsgebiete händisch aus allen verfügbaren Bildern um verschiedene Strahlungsverhältnisse abzudecken.
+o Klassifizierung in Grün / nicht Grün für Zeitreihe
+o Extraktion der Werte für alle Segmente pro Zeitpunkt
+o Auswahl für „Baum mit Blattaustrieb“ anhand von Schwellenwert (% Pixel „Grün“)
+- Ergebnis: Bekannter Zeitpunkt Blattaustrieb pro Baum -> Anzahl absolut und Verortung
+o Mit Klassifizierung der Arten
+- Ergebnis: Bekannter Zeitpunkt Blattaustrieb pro Baum und Art -> Anzahl absolut und Verortung, sowie den artspezifischen Blattaustrieb
