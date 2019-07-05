@@ -22,6 +22,46 @@ source(file.path(root_folder, paste0(pathdir,"001_setup_envinfsys_v1.R")))
 ###---------------------------------------------------------------------------------------###
 #############################################################################################
 
+#load shp and list rasters in folder
+shp <-rgdal::readOGR(file.path(envrmt$path_vector,"trees.shp"))
+crs(shp)
+shp2 <-spTransform(shp, CRS("+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs "))
+crs(shp2)
+ls <- list.files(file.path(envrmt$path_raster),pattern='\\.tif$')
+ls
+
+rst <- raster::brick(file.path(envrmt$path_raster, ls[1]))
+plot(rst)
+rst
+#create bbox
+bb <- bbox(shp2)
+bb
+
+bb2 <- bb[-3,]
+bb2
+# get extent
+ext <- extent(bb2)
+ext
+
+
+ext2 <-c(ext[1]-20,ext[2]+20,ext[3]-20,ext[4]+20)
+ext2
+
+c <- crop(rst,ext)
+c2 <- crop(rst,ext2)
+
+plot(c)
+plot(c2)
+
+raster::writeRaster(c,filename=paste0(file.path(envrmt$path_tmp,"c.tif"),"croped.tif"),overwrite = TRUE,NAflag = 0)
+raster::writeRaster(c2,filename=paste0(file.path(envrmt$path_tmp,"c2.tif"),"croped2.tif"),overwrite = TRUE)
+
+crs(rst)
+crs(c)
+crs(shp2)
+
+shp2 <-spTransform(shp, CRS("+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs "))
+crs(shp2)
 dem <- raster::raster(file.path(envrmt$path_raster, "exampl_dem.tif"))
 
 ls <- list.files(file.path(envrmt$path_raster),pattern='\\.tif$')
@@ -29,23 +69,54 @@ ls
 stk <- raster::stack(ls)
 stk
 stk <- raster::stack(file.path(envrmt$path_raster,ls))
-rst <- raster::raster(paste(file.path(envrmt$path_raster),"/", ls[1]))
+rst <- raster::raster(file.path(envrmt$path_raster, ls[1]))
 ls[1]
-
+names(rst)
 # read treepos layer
 sl <- list.files(envrmt$path_vector)
 sl
 shp <- rgdal::readOGR(file.path(envrmt$path_vector,"trees.shp"))
-
+plot(shp)
 #get bbox from shp
 library(sf)
 bb <- st_bbox(shp)
 plot(bb)
 
-#crop raster by shp
-crop <- raster::crop(rst,shp)
-raster::writeRaster(cc,filename=paste0(file.path(envrmt$path_tmp),"/crop.tif"),overwrite = TRUE,NAflag = 0)
+#versuch ausschrieben und wiedereinladen als shp
+library(rgdal)
+writeOGR(bb,file.path(envrmt$path_tmp, "bbox.shp"),"layername", driver="ESRI Shapefile")
 
+
+bbx <- bboxSpatialPolygon(bb, proj4stringFrom = "+proj=utm +zone=32 +ellps=GRS80 +units=m +no_defs" ,
+                          proj4stringTo = "+proj=utm +zone=32 +ellps=GRS80 +units=m +no_defs" )
+bb
+extend <- buffer(shp,20)
+plot(shp)
+plot(extend)
+#crop raster by shp
+crop <- raster::crop(rst,extend)
+i=3
+raster::writeRaster(crop,filename=paste0(file.path(envrmt$path_tmp,paste("/crop2",as.factor(i),".tif")),overwrite = TRUE,NAflag = 0))
+raster::writeRaster(crop,filename=paste0(file.path(envrmt$path_tmp),"/crop.tif"),overwrite = TRUE,NAflag = 0)
+
+
+plot(crop)
+buf <- buffer(crop,20)
+plot(buf)
+bbox <-bbox(shp)
+test <-bb[1]
+test
+test <-extent(crop)
+test[1]
+
+
+files <- list.files(pattern="n_msi.*.img$")  
+files
+crop
+### paste0 weg und nur file.path
+crop
+cr <- extend(crop,c(200,200))
+cr
 #crop raster by bbox
 crop_bb <- crop(rst,bbox)
 ext <- extent(bb)
