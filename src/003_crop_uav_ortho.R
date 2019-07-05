@@ -31,13 +31,13 @@ utm="+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs "
 output=envrmt$path_tmp
 prename= "aoi_"
 ls=list.files(file.path(envrmt$path_raster),pattern='\\.tif$')
-ls
+
 #run Reaper
 masked_reaper(shp=shp,buf=20,proj=utm,output=output,prename=prename,ls=ls)
 
 ### crop for greenes test area
 test_aoi <-rgdal::readOGR(file.path(envrmt$path_TMP,"greeness.shp"))
-prename2= "test_aoi_"
+prename2= "test_"
 masked_reaper(shp=test_aoi,buf=0,proj=utm,output=output,prename=prename2,ls=ls)
 
 # end of script
