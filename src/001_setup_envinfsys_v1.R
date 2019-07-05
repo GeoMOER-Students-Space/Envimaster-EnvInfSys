@@ -4,10 +4,13 @@
 cat("#--- set Folders ---#",sep = "\n")
 project_folders = c("data/",                                
                     "data/001_org/",
+                    "data/001_org/raster/",
+                    "data/001_org/vector/",
                     "data/002_processed/",
                     "data/003_Stage_2/",
                     "data/004_Stage_3/",  #local data not in repo
-                    
+                    "tmp/",
+                    "repo/src/000_dev/",
                     "repo/src/", #for scripts
                     "repo/src/Cenith_V2",
                     "repo/doc/",   #for docs
