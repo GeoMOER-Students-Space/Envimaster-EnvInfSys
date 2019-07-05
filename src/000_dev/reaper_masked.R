@@ -39,9 +39,9 @@ masked_reaper <- function(shp,ls,buf=20,output,proj,prename){
 }
 
 #example
-proj="+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs "
-output=envrmt$path_tmp
-prename= "cropped_"
-ls=ls
-test <- masked_reaper(shp=shp,buf=20,proj=proj,output=output,prename=prename,ls=ls)
+#proj="+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs "
+#output=envrmt$path_tmp
+#prename= "cropped_"
+#ls=ls
+#test <- masked_reaper(shp=shp,buf=20,proj=proj,output=output,prename=prename,ls=ls)
 
