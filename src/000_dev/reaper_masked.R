@@ -28,8 +28,9 @@ masked_reaper <- function(shp,ls,buf=20,output,proj,prename){
     cat(" ",sep = "\n")
     cat(paste0("### Reaper starts cropping raster ",as.factor(i)," / ",as.factor(length(ls))," ###",sep = "\n"))
     cropped <- crop(rst,ext2)
-    name <- paste(prename, names(rst), sep="")
-    raster::writeRaster(cropped,filename=paste0(file.path(output,name[i]),".tif"),overwrite = TRUE)
+    name <- paste(prename,names(rst[[1]]),".tif", sep="")
+    print(name)
+    raster::writeRaster(cropped,filename=paste(file.path(output,name)),overwrite = TRUE)
     cat(" ",sep = "\n")
     cat(paste0("### Reaper wrote raster ",as.factor(i)," / ",as.factor(length(ls))," ###",sep = "\n"))
     
